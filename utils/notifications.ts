@@ -27,3 +27,20 @@ export async function registerForPushNotifications(): Promise<boolean> {
     return false;
   }
 }
+
+// export async function registerForPushNotifications(): Promise<boolean> {
+//   const { status } = await Notifications.getPermissionsAsync();
+//   console.log("[PERMISSION STATUS]:", status);
+
+//   if (status !== "granted") {
+//     const { status: newStatus } = await Notifications.requestPermissionsAsync();
+//     console.log("[REQUESTED NEW STATUS]:", newStatus);
+//     if (newStatus !== "granted") {
+//       alert("Permission denied");
+//       return false;
+//     }
+//     return true;
+//   }
+
+//   return true;
+// }

@@ -1,5 +1,6 @@
 // app/index.tsx
 import { registerForPushNotifications } from "@/utils/notifications";
+import { scheduleDailyNotifications } from "@/utils/scheduler";
 import * as Notifications from "expo-notifications";
 import { useEffect, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
@@ -19,7 +20,10 @@ export default function HomeScreen() {
 
   const handlePress = async () => {
     const success = await registerForPushNotifications();
-    setGranted(success);
+    if (success) {
+      await scheduleDailyNotifications();
+      setGranted(true);
+    }
   };
 
   return (
