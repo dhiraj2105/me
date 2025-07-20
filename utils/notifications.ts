@@ -1,21 +1,29 @@
+// utils/notifications.ts
 import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
 
-export async function registerForPushNotifications(): Promise<void> {
-  if (Device.isDevice) {
+export async function registerForPushNotifications(): Promise<boolean> {
+  if (!Device.isDevice) {
+    alert("Must use physical device for notifications.");
+    return false;
+  }
+
+  try {
     const { status: existingStatus } =
       await Notifications.getPermissionsAsync();
+    console.log("Existing status:", existingStatus);
+
     let finalStatus = existingStatus;
 
     if (existingStatus !== "granted") {
       const { status } = await Notifications.requestPermissionsAsync();
       finalStatus = status;
+      console.log("New status:", finalStatus);
     }
 
-    if (finalStatus !== "granted") {
-      alert("Permission required for notifications to work.");
-    }
-  } else {
-    alert("Must use a physical device for notifications.");
+    return finalStatus === "granted";
+  } catch (error) {
+    console.error("Error requesting permissions:", error);
+    return false;
   }
 }
